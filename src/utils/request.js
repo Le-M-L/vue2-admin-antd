@@ -104,6 +104,7 @@ function checkAuthorization(authType = AUTH_TYPE.BEARER) {
  */
 function loadInterceptors(interceptors, options) {
   const {request, response} = interceptors
+  console.log(request)
   // 加载请求拦截器
   request.forEach(item => {
     let {onFulfilled, onRejected} = item
