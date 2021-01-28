@@ -28,6 +28,7 @@ function setAppOptions(options) {
  * @param routerMap 本地路由组件注册配置
  */
 function parseRoutes(routesConfig, routerMap) {
+  console.log(routesConfig, routerMap)
   let routes = []
   routesConfig.forEach(item => {
     // 获取注册在 routerMap 中的 router，初始化 routeCfg
@@ -84,9 +85,8 @@ function loadRoutes(routesConfig) {
   }
   /*************** 兼容 version < v0.6.1 *****************/
 
-  // 应用配置
+  // 应用配置 存放了所有路由
   const {router, store, i18n} = appOptions
-
   // 如果 routesConfig 有值，则更新到本地，否则从本地获取
   if (routesConfig) {
     store.commit('account/setRoutesConfig', routesConfig)
@@ -95,6 +95,7 @@ function loadRoutes(routesConfig) {
   }
   // 如果开启了异步路由，则加载异步路由配置
   const asyncRoutes = store.state.setting.asyncRoutes
+ 
   if (asyncRoutes) {
     if (routesConfig && routesConfig.length > 0) {
       const routes = parseRoutes(routesConfig, routerMap)
@@ -109,6 +110,7 @@ function loadRoutes(routesConfig) {
   mergeI18nFromRoutes(i18n, router.options.routes)
   // 初始化Admin后台菜单数据
   const rootRoute = router.options.routes.find(item => item.path === '/')
+
   const menuRoutes = rootRoute && rootRoute.children
   if (menuRoutes) {
     store.commit('setting/setMenuData', menuRoutes)

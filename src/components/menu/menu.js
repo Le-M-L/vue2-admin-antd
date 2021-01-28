@@ -202,9 +202,9 @@ export default {
     updateMenu () {
       const matchedRoutes = this.$route.matched.filter(item => item.path !== '')
       this.selectedKeys = this.getSelectedKey(this.$route)
-      let openKeys = matchedRoutes.map(item => item.path)
-      openKeys = openKeys.slice(0, openKeys.length -1)
-      if (!fastEqual(openKeys, this.sOpenKeys)) {
+      let openKeys = matchedRoutes.map(item => item.path) //获取所有地址
+      openKeys = openKeys.slice(0, openKeys.length -1) //获取前两个数据
+      if (!fastEqual(openKeys, this.sOpenKeys)) { //对比
         this.collapsed || this.mode === 'horizontal' ? this.cachedOpenKeys = openKeys : this.sOpenKeys = openKeys
       }
     },
