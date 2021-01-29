@@ -123,7 +123,7 @@ export default {
           const routesConfig = result.data.data
           console.log(routesConfig)
           loadRoutes(routesConfig)
-          this.$router.push('/dashboard/workplace')
+          this.$router.push('/list/search/application')
           this.$message.success(loginRes.message, 3)
         })
       } else {

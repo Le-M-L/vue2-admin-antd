@@ -19,7 +19,8 @@
           <slot></slot>
         </div>
       </a-layout-content>
-      <a-layout-footer style="padding: 0px">
+      <!-- 登录页的页脚 -->
+      <a-layout-footer style="padding: 0px"> 1
         <PageFooter :link-list="footerLinks" :copyright="copyright" />
       </a-layout-footer>
     </a-layout>
