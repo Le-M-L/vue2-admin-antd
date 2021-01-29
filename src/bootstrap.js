@@ -9,7 +9,7 @@ import interceptors from '@/utils/axios-interceptors'
  * @param router 应用的路由实例
  * @param store 应用的 vuex.store 实例
  * @param i18n 应用的 vue-i18n 实例
- * @param i18n 应用的 message 实例
+ * @param message 应用的 message 实例
  */
 function bootstrap({router, store, i18n, message}) {
   // 设置应用配置

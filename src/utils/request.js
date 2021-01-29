@@ -98,13 +98,12 @@ function checkAuthorization(authType = AUTH_TYPE.BEARER) {
 }
 
 /**
- * 加载 axios 拦截器
+ * 加载 axios 拦截器 @/utils/axios-interceptors 拦截器所在地址
  * @param interceptors
  * @param options
  */
 function loadInterceptors(interceptors, options) {
   const {request, response} = interceptors
-  console.log(request)
   // 加载请求拦截器
   request.forEach(item => {
     let {onFulfilled, onRejected} = item
@@ -119,7 +118,7 @@ function loadInterceptors(interceptors, options) {
       error => onRejected(error, options)
     )
   })
-  // 加载响应拦截器
+  // 加载响应拦截器  
   response.forEach(item => {
     let {onFulfilled, onRejected} = item
     if (!onFulfilled || typeof onFulfilled !== 'function') {

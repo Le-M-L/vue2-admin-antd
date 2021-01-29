@@ -1,16 +1,16 @@
 <template>
   <a-layout :class="['admin-layout', 'beauty-scroll']">
-    <drawer v-if="isMobile" v-model="drawerOpen">
-      <side-menu :theme="theme.mode" :menuData="menuData" :collapsed="false" :collapsible="false" @menuSelect="onMenuSelect"/>
-    </drawer>
-    <side-menu :class="[fixedSideBar ? 'fixed-side' : '']" :theme="theme.mode" v-else-if="layout === 'side' || layout === 'mix'" :menuData="sideMenuData" :collapsed="collapsed" :collapsible="true" />
+    <Drawer v-if="isMobile" v-model="drawerOpen">
+      <SideMenu :theme="theme.mode" :menuData="menuData" :collapsed="false" :collapsible="false" @menuSelect="onMenuSelect"/>
+    </Drawer>
+    <SideMenu :class="[fixedSideBar ? 'fixed-side' : '']" :theme="theme.mode" v-else-if="layout === 'side' || layout === 'mix'" :menuData="sideMenuData" :collapsed="collapsed" :collapsible="true" />
     <div v-if="fixedSideBar && !isMobile" :style="`width: ${sideMenuWidth}; min-width: ${sideMenuWidth};max-width: ${sideMenuWidth};`" class="virtual-side"></div>
-    <drawer v-if="!hideSetting" v-model="showSetting" placement="right">
+    <Drawer v-if="!hideSetting" v-model="showSetting" placement="right">
       <div class="setting" slot="handler">
         <a-icon :type="showSetting ? 'close' : 'setting'"/>
       </div>
-      <setting />
-    </drawer>
+      <Setting />
+    </Drawer>
     <a-layout class="admin-layout-main beauty-scroll">
       <admin-header :class="[{'fixed-tabs': fixedTabs, 'fixed-header': fixedHeader, 'multi-page': multiPage}]" :style="headerStyle" :menuData="headMenuData" :collapsed="collapsed" @toggleCollapse="toggleCollapse"/>
       <a-layout-header :class="['virtual-header', {'fixed-tabs' : fixedTabs, 'fixed-header': fixedHeader, 'multi-page': multiPage}]" v-show="fixedHeader"></a-layout-header>
@@ -20,7 +20,7 @@
         </div>
       </a-layout-content>
       <a-layout-footer style="padding: 0px">
-        <page-footer :link-list="footerLinks" :copyright="copyright" />
+        <PageFooter :link-list="footerLinks" :copyright="copyright" />
       </a-layout-footer>
     </a-layout>
   </a-layout>
@@ -30,8 +30,8 @@
 import AdminHeader from './header/AdminHeader'
 import PageFooter from './footer/PageFooter'
 import Drawer from '../components/tool/Drawer'
-import SideMenu from '../components/menu/SideMenu'
-import Setting from '../components/setting/Setting'
+import SideMenu from '../components/menu/SideMenu' //侧边栏
+import Setting from '../components/setting/Setting' //设置
 import {mapState, mapMutations, mapGetters} from 'vuex'
 
 // const minHeight = window.innerHeight - 64 - 122
@@ -63,7 +63,7 @@ export default {
       if(!val) {
         this.drawerOpen = false
       }
-    }
+    },
   },
   computed: {
     ...mapState('setting', ['isMobile', 'theme', 'layout', 'footerLinks', 'copyright', 'fixedHeader', 'fixedSideBar',

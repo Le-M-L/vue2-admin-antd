@@ -108,7 +108,7 @@ function loadRoutes(routesConfig) {
   }
   // 提取路由国际化数据
   mergeI18nFromRoutes(i18n, router.options.routes)
-  // 初始化Admin后台菜单数据
+  // 初始化Admin后台菜单数据 获取当前首页下的所有菜单
   const rootRoute = router.options.routes.find(item => item.path === '/')
 
   const menuRoutes = rootRoute && rootRoute.children
