@@ -12,7 +12,6 @@ const resp401 = {
     if (response.code === 401) {
       message.error('无此权限')
     }
-    console.log(response)
     return response
   },
   /**

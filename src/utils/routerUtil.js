@@ -28,19 +28,18 @@ function setAppOptions(options) {
  * @param routerMap 本地路由组件注册配置
  */
 function parseRoutes(routesConfig, routerMap) {
-  console.log(routesConfig, routerMap)
   let routes = []
   routesConfig.forEach(item => {
     // 获取注册在 routerMap 中的 router，初始化 routeCfg
     let router = undefined, routeCfg = {}
-    if (typeof item === 'string') {
-      router = routerMap[item]
-      routeCfg = {path: router.path || item, router: item}
-    } else if (typeof item === 'object') {
+    if (typeof item === 'string') { //当为字符串的时候 直接赋予路由配置数据
+      router = routerMap[item] 
+      routeCfg = {path: router.path || item, router: item} //设置 路由配置信息
+    } else if (typeof item === 'object') { //当为对象的时候  取对象的router 标记赋值
       router = routerMap[item.router]
       routeCfg = item
     }
-    if (!router) {
+    if (!router) { //当路由不存在的时候 给默认值 并提醒
       console.warn(`can't find register for router ${routeCfg.router}, please register it in advance.`)
       router = typeof item === 'string' ? {path: item, name: item} : item
     }
@@ -85,7 +84,7 @@ function loadRoutes(routesConfig) {
   }
   /*************** 兼容 version < v0.6.1 *****************/
 
-  // 应用配置 存放了所有路由
+  // 应用配置 存放了所有路由  页面初始化会获取一次数据一次 储存非异步是所有权限页面
   const {router, store, i18n} = appOptions
   // 如果 routesConfig 有值，则更新到本地，否则从本地获取
   if (routesConfig) {
@@ -101,6 +100,7 @@ function loadRoutes(routesConfig) {
       const routes = parseRoutes(routesConfig, routerMap)
       const finalRoutes = mergeRoutes(basicOptions.routes, routes)
       formatRoutes(finalRoutes)
+      // router 应用的路由实例
       router.options = {...router.options, routes: finalRoutes}
       router.matcher = new Router({...router.options, routes:[]}).matcher
       router.addRoutes(finalRoutes)
@@ -119,11 +119,12 @@ function loadRoutes(routesConfig) {
 
 /**
  * 合并路由
- * @param target {Route[]}
- * @param source {Route[]}
+ * @param target {Route[]} 本地配置的路由
+ * @param source {Route[]} 接口的异步路由
  * @returns {Route[]}
  */
 function mergeRoutes(target, source) {
+  console.log(target, source,'=================')
   const routesMap = {}
   target.forEach(item => routesMap[item.path] = item)
   source.forEach(item => routesMap[item.path] = item)

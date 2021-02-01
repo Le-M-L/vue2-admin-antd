@@ -74,12 +74,13 @@
 </template>
 
 <script>
+
 import CommonLayout from '@/layouts/CommonLayout'
-import {login, getRoutesConfig} from '@/services/user'
+import {login, login1, getRoutesConfig, getModule} from '@/services/user'
 import {setAuthorization} from '@/utils/request'
 import {loadRoutes} from '@/utils/routerUtil'
 import {mapMutations} from 'vuex'
-
+import sha1 from "sha1"
 export default {
   name: 'Login',
   components: {CommonLayout},
@@ -105,10 +106,12 @@ export default {
           const name = this.form.getFieldValue('name')
           const password = this.form.getFieldValue('password')
           login(name, password).then(this.afterLogin)
+          login1(name, sha1(password)).then(this.afterLogin)
         }
       })
     },
     afterLogin(res) {
+      console.log(res)
       this.logging = false
       const loginRes = res.data
       if (loginRes.code >= 0) {
@@ -116,12 +119,13 @@ export default {
         this.setUser(user) //设置登录信息
         this.setPermissions(permissions) //设置权限
         this.setRoles(roles)
-        //设置认证信息  设置生效时间
-        setAuthorization({token: loginRes.data.token, expireAt: new Date(loginRes.data.expireAt)})
+        //设置认证信息  设置生效时间  默认设置七天登录时间
+        let days = new Date().getTime() + 7 * 24 * 60 * 60 * 1000;
+        setAuthorization({token: loginRes.data.token, expireAt: new Date(days)})
         // 获取路由配置
+        getModule()
         getRoutesConfig().then(result => {
           const routesConfig = result.data.data
-          console.log(routesConfig)
           loadRoutes(routesConfig)
           this.$router.push('/list/search/application')
           this.$message.success(loginRes.message, 3)
