@@ -76,7 +76,7 @@
       indentSize: Number,
       loading: Boolean,
       locale: Object,
-      pagination: Object,
+      pagination: [Object,Boolean],
       rowClassName: Function,
       rowKey: [String, Function],
       rowSelection: Object,
@@ -88,7 +88,7 @@
       customRow: Function,
       getPopupContainer: Function,
       transformCellText: Function,
-      formatConditions: Boolean
+      formatConditions: Boolean,
     },
     provide() {
       return {
@@ -105,6 +105,7 @@
     },
     computed: {
       slots() {
+        console.log(this.$slots)
         return Object.keys(this.$slots).filter(slot => slot !== 'title')
       },
       scopedSlots() {

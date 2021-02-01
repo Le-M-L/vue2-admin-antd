@@ -1,6 +1,6 @@
 <template>
   <div class="table">
-    <advance-table
+    <AdvanceTable
       :columns="columns"
       :data-source="dataSource"
       title="高级表格-Beta"
@@ -22,6 +22,7 @@
         onShowSizeChange: onSizeChange,
       }"
     >
+    <!-- 数据重置 -->
       <template slot="statusTitle">
         状态<a-icon style="margin: 0 4px" type="info-circle" />
       </template>
@@ -31,7 +32,7 @@
       <template slot="status" slot-scope="{text}">
         {{text | statusStr}}
       </template>
-    </advance-table>
+    </AdvanceTable>
     <api />
   </div>
 </template>
@@ -68,7 +69,7 @@
           },
           {
             title: '订单号',
-            dataIndex: 'orderId'
+            dataIndex: 'orderId1'
           },
           {
             searchAble: true,
