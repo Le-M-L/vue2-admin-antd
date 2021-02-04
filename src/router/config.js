@@ -90,8 +90,12 @@ const options = {
             {
               path: 'query',
               name: '查询表格',
-              meta: {
-                authority: 'queryForm',
+              meta: { 
+                authority: {
+                  permissions:'queryForm', //设置准入权限显示页面
+                  role: 'test',//通过角色权限显示页面
+                }, 
+               
               },
               component: () => import('@/pages/list/QueryList'),
             },

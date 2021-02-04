@@ -24,14 +24,15 @@ const hasInjected = (method) => method.toString().indexOf('//--auth-inject') !==
 
 /**
  * 操作权限校验
- * @param authConfig
- * @param permission
- * @param role
- * @param permissions
- * @param roles
+ * @param authConfig  需要校验的操作名 和 校验类型
+ * @param permission  判断当前页面需要的操作权限
+ * @param role        判断当前页面需要的角色权限 角色权限可以附带按钮权限
+ * @param permissions 当前角色所拥有的权限
+ * @param roles       当前角色所有用的角色
  * @returns {boolean}
  */
 const auth = function(authConfig, permission, role, permissions, roles) {
+  //delete  和   permission and role
   const {check, type} = authConfig
   if (check && typeof check === 'function') {
     return check.apply(this, [permission, role, permissions, roles])
@@ -128,7 +129,7 @@ const AuthorityPlugin = {
                 this.$options.methods[key] = function () {
                   //--auth-inject
                   if (this.$auth(check, type)) {
-                    return method.apply(this, arguments)
+                    return method.apply(this, arguments) 
                   } else {
                     if (onFailure && typeof onFailure === 'function') {
                       this[`$${check}Failure`] = onFailure
@@ -155,7 +156,9 @@ const AuthorityPlugin = {
         $auth(check, type) {
           const permissions = this.$store.getters['account/permissions']
           const roles = this.$store.getters['account/roles']
+          // *号默认无权限  返回给null 
           const permission = getRoutePermission(permissions, this.$route)
+          // 角色权限是否存在 不存在 返回Null  如果存在返回当前权限
           const role = getRouteRole(roles, this.$route)
           return auth.apply(this, [{check, type}, permission, role, permissions, roles])
         }

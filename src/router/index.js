@@ -17,7 +17,17 @@ const loginIgnore = {
     return this.names.includes(route.name) || this.paths.includes(route.path)
   }
 }
-
+// const route = {
+//   name: '验权页面',
+//   path: 'auth/demo',
+//   meta: {
+//      authority: 'form', //可以直接写字符串
+//      authority: { //页面所需要的权限 对应 admin.permissions 的权限id
+//          permission: 'form'
+//        } 
+//   },
+//   component: () => import('@/pages/demo')
+// }
 /**
  * 初始化路由实例
  * @param isAsync 是否异步路由模式

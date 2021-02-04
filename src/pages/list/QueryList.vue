@@ -185,7 +185,10 @@ export default {
     }
   },
   authorize: {
-    deleteRecord: 'delete'
+    deleteRecord: {
+      check:'delete',
+      type: 'permission'
+    }
   },
   methods: {
     deleteRecord(key) {

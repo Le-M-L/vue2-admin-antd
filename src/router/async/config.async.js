@@ -17,8 +17,8 @@ const routesConfig = [
   }
 ]
 
+//默认赋予权限 * 
 const options = {
   routes: parseRoutes(routesConfig, routerMap)
 }
-console.log(options.routes,'======')
 export default options
