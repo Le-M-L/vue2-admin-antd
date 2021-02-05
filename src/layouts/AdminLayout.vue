@@ -1,17 +1,24 @@
 <template>
+    <!-- fixedSideBar 用于固定侧边栏 -->
+    <!-- theme 主题颜色配置 -->
   <a-layout :class="['admin-layout', 'beauty-scroll']">
-    <Drawer v-if="isMobile" v-model="drawerOpen">
+    <!-- 屏幕小于 769测侧边栏 显示 -->
+    <Drawer v-if="isMobile" v-model="drawerOpen"> 
       <SideMenu :theme="theme.mode" :menuData="menuData" :collapsed="false" :collapsible="false" @menuSelect="onMenuSelect"/>
     </Drawer>
+    <!-- 正常侧边栏 --> 
     <SideMenu :class="[fixedSideBar ? 'fixed-side' : '']" :theme="theme.mode" v-else-if="layout === 'side' || layout === 'mix'" :menuData="sideMenuData" :collapsed="collapsed" :collapsible="true" />
     <div v-if="fixedSideBar && !isMobile" :style="`width: ${sideMenuWidth}; min-width: ${sideMenuWidth};max-width: ${sideMenuWidth};`" class="virtual-side"></div>
+    <!-- 系统配置 抽屉 -->
     <Drawer v-if="!hideSetting" v-model="showSetting" placement="right">
       <div class="setting" slot="handler">
         <a-icon :type="showSetting ? 'close' : 'setting'"/>
       </div>
       <Setting />
     </Drawer>
+    
     <a-layout class="admin-layout-main beauty-scroll">
+      <!-- 内容头部 部分 -->
       <admin-header :class="[{'fixed-tabs': fixedTabs, 'fixed-header': fixedHeader, 'multi-page': multiPage}]" :style="headerStyle" :menuData="headMenuData" :collapsed="collapsed" @toggleCollapse="toggleCollapse"/>
       <a-layout-header :class="['virtual-header', {'fixed-tabs' : fixedTabs, 'fixed-header': fixedHeader, 'multi-page': multiPage}]" v-show="fixedHeader"></a-layout-header>
       <a-layout-content class="admin-layout-content" :style="`min-height: ${minHeight}px;`">

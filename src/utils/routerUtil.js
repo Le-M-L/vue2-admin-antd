@@ -180,6 +180,7 @@ function formatRoutes(routes) {
       route.path = '/' + path
     }
   })
+  
   formatAuthority(routes)
 }
 

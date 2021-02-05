@@ -21,15 +21,6 @@
  *    children: [子菜单配置]
  *  }
  * ]
- *
- * i18n: 国际化配置。系统默认会根据 options route配置的 path 和 name 生成英文以及中文的国际化配置，如需自定义或增加其他语言，配置
- * 此项即可。如：
- * i18n: {
- *   messages: {
- *     CN: {dashboard: {name: '监控中心'}}
- *     HK: {dashboard: {name: '監控中心'}}
- *   }
- * }
  **/
 import Menu from 'ant-design-vue/es/menu'
 import Icon from 'ant-design-vue/es/icon'
@@ -60,7 +51,6 @@ export default {
       required: false,
       default: false
     },
-    i18n: Object,
     openKeys: Array
   },
   data () {
@@ -71,7 +61,7 @@ export default {
     }
   },
   computed: {
-    menuTheme() {
+    menuTheme() { //主题
       return this.theme == 'light' ? this.theme : 'dark'
     }
   },
@@ -80,26 +70,11 @@ export default {
     if (this.options.length > 0 && !this.options[0].fullPath) {
       this.formatOptions(this.options, '')
     }
-    // 自定义国际化配置
-    if(this.i18n && this.i18n.messages) {
-      const messages = this.i18n.messages
-      Object.keys(messages).forEach(key => {
-        this.$i18n.mergeLocaleMessage(key, messages[key])
-      })
-    }
   },
   watch: {
     options(val) {
       if (val.length > 0 && !val[0].fullPath) {
         this.formatOptions(this.options, '')
-      }
-    },
-    i18n(val) {
-      if(val && val.messages) {
-        const messages = this.i18n.messages
-        Object.keys(messages).forEach(key => {
-          this.$i18n.mergeLocaleMessage(key, messages[key])
-        })
       }
     },
     collapsed (val) {
@@ -167,13 +142,13 @@ export default {
     },
     renderItem: function (h, menu) {
       const meta = menu.meta
-      if (!meta || !meta.invisible) {
+      if (!meta || !meta.invisible) { //是否显示菜单栏
         let renderChildren = false
         const children = menu.children
         if (children != undefined) {
           for (let i = 0; i < children.length; i++) {
             const childMeta = children[i].meta
-            if (!childMeta || !childMeta.invisible) {
+            if (!childMeta || !childMeta.invisible) { //是否显示子菜单
               renderChildren = true
               break
             }
@@ -190,6 +165,7 @@ export default {
       })
       return menuArr
     },
+    //格式化路由
     formatOptions(options, parentPath) {
       options.forEach(route => {
         let isFullPath = route.path.substring(0, 1) == '/'
@@ -213,20 +189,21 @@ export default {
     }
   },
   render (h) {
+    console.log(Menu)
     return h(
       Menu,
       {
         props: {
-          theme: this.menuTheme,
-          mode: this.$props.mode,
-          selectedKeys: this.selectedKeys,
-          openKeys: this.openKeys ? this.openKeys : this.sOpenKeys
+          theme: this.menuTheme, //主题
+          mode: this.$props.mode, //菜单类型
+          selectedKeys: this.selectedKeys, //当前选中的菜单项 key 数组
+          openKeys: this.openKeys ? this.openKeys : this.sOpenKeys, //当前展开的 SubMenu 菜单项 key 数组
         },
         on: {
-          'update:openKeys': (val) => {
+          'update:openKeys': (val) => { //监听展开key的变化重新赋值
             this.sOpenKeys = val
           },
-          click: (obj) => {
+          click: (obj) => {             // 点击更新选中菜单
             obj.selectedKeys = [obj.key]
             this.$emit('select', obj)
           }
