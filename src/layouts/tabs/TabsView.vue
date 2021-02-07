@@ -24,7 +24,7 @@
 <script>
 import AdminLayout from '@/layouts/AdminLayout'
 import Contextmenu from '@/components/menu/Contextmenu';//tabs 右击点击效果 关闭tabs菜单
-import PageToggleTransition from '@/components/transition/PageToggleTransition'
+import PageToggleTransition from '@/components/transition/PageToggleTransition' //动画效果
 import {mapState, mapMutations} from 'vuex'
 import AKeepAlive from '@/components/cache/AKeepAlive'
 import TabsHead from '@/layouts/tabs/TabsHead'
@@ -58,7 +58,7 @@ export default {
     }
   },
   created () {
-    //设置排除缓存正则
+    //设置不缓存页面的
     this.loadCacheConfig(this.$router?.options?.routes)
      //设置缓存页面 
     this.loadCachedTabs()
@@ -89,6 +89,7 @@ export default {
   watch: {
     '$router.options.routes': function (val) {
       this.excludeKeys = []
+      //设置不缓存页面的
       this.loadCacheConfig(val)
     },
     '$route': function (newRoute) {
@@ -117,15 +118,16 @@ export default {
     }
   },
   methods: {
+    //切换选中 tabs 并且 跳转路由
     changePage (key) {
       this.activePage = key
       this.$router.push(key)
     },
     remove (key, next) {
       if (this.pageList.length === 1) {
-        return this.$message.warning(this.$t('warn'))
+        return;
+        // return this.$message.warning('最少一个页面')
       }
-      //清除缓存
       let index = this.pageList.findIndex(item => item.fullPath === key)
       this.clearCaches = this.pageList.splice(index, 1).map(page => page.cachedKey)
       if (next) {
@@ -136,15 +138,16 @@ export default {
         this.$router.push(this.activePage)
       }
     },
+    //刷新页面
     refresh (key, page) {
       page = page || this.pageList.find(item => item.fullPath === key)
-      page.loading = true
+      page.loading = true // 刷新 icon 转圈
       this.clearCache(page)
       if (key === this.activePage) {
         this.reloadContent(() => page.loading = false)
       } else {
         // 其实刷新很快，加这个延迟纯粹为了 loading 状态多展示一会儿，让用户感知刷新这一过程
-        setTimeout(() => page.loading = false, 500)
+        setTimeout(() => page.loading = false, 200)
       }
     },
     onContextmenu(pageKey, e) {
@@ -189,7 +192,9 @@ export default {
     closeRight (pageKey) {
       // 清除缓存
       const index = this.pageList.findIndex(item => item.fullPath === pageKey)
-      const clearPages = this.pageList.filter((item, i) => i > index && !item.unclose)
+      const clearPages = this.pageList.filter((item, i) => {
+        return i > index && !item.unclose
+      })
       this.clearCaches = clearPages.map(item => item.cachedKey)
       this.pageList = this.pageList.filter(item => !clearPages.includes(item))
       // 判断跳转
@@ -198,6 +203,7 @@ export default {
         this.$router.push(this.activePage)
       }
     },
+    //清楚缓存
     clearCache(page) {
       page._init_ = false
       this.clearCaches = [page.cachedKey]
@@ -207,12 +213,12 @@ export default {
       setTimeout(() => {
         this.refreshing = false
         this.$nextTick(() => {
-          this.setCachedKey(this.$route)
+          this.setCachedKey(this.$route) //重新缓存
           if (typeof onLoaded === 'function') {
             onLoaded.apply(this, [])
           }
         })
-      }, 200)
+      },10)
     },
     /**
      * 添加监听器

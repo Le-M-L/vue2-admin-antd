@@ -28,26 +28,9 @@
 
 <script>
   import {mapState, mapMutations} from 'vuex'
-  import {getI18nKey} from '@/utils/routerUtil'
 
   export default {
     name: 'TabsHead',
-    i18n: {
-      messages: {
-        CN: {
-          lock: '点击锁定页签头',
-          unlock: '点击解除锁定',
-        },
-        HK: {
-          lock: '點擊鎖定頁簽頭',
-          unlock: '點擊解除鎖定',
-        },
-        US: {
-          lock: 'click to lock the tabs head',
-          unlock: 'click to unlock',
-        }
-      }
-    },
     props: {
       pageList: Array,
       active: String,
@@ -65,7 +48,7 @@
     computed: {
       ...mapState('setting', ['layout', 'pageWidth', 'fixedHeader', 'fixedTabs', 'customTitles']),
       lockTitle() {
-        return this.$t(this.fixedTabs ? 'unlock' : 'lock')
+        return this.fixedTabs ? 'unlock' : 'lock'
       }
     },
     methods: {
@@ -97,7 +80,7 @@
       pageName(page) {
         const pagePath = page.fullPath.split('?')[0]
         const custom = this.customTitles.find(item => item.path === pagePath)
-        return (custom && custom.title) || page.title || this.$t(getI18nKey(page.keyPath))
+        return (custom && custom.title) || page.title || page.name
       }
     }
   }
