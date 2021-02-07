@@ -25,8 +25,6 @@
 import Menu from 'ant-design-vue/es/menu'
 import Icon from 'ant-design-vue/es/icon'
 import fastEqual from 'fast-deep-equal'
-import {getI18nKey} from '@/utils/routerUtil'
-
 const {Item, SubMenu} = Menu
 
 export default {
@@ -118,7 +116,7 @@ export default {
           h(tag, config,
             [
               this.renderIcon(h, menu.meta ? menu.meta.icon : 'none', menu.fullPath),
-              this.$t(getI18nKey(menu.fullPath))
+              menu.name
             ]
           )
         ]
@@ -129,7 +127,7 @@ export default {
       let subItem = [h('span', {slot: 'title', attrs: {style: 'overflow:hidden;white-space:normal;text-overflow:clip;'}},
         [
           this.renderIcon(h, menu.meta ? menu.meta.icon : 'none', menu.fullPath),
-          this.$t(getI18nKey(menu.fullPath))
+          menu.name
         ]
       )]
       let itemArr = []
@@ -203,7 +201,8 @@ export default {
           'update:openKeys': (val) => { //监听展开key的变化重新赋值
             this.sOpenKeys = val
           },
-          click: (obj) => {             // 点击更新选中菜单
+          click: (obj,key,) => {             // 点击更新选中菜单
+            console.log(obj,key)
             obj.selectedKeys = [obj.key]
             this.$emit('select', obj)
           }

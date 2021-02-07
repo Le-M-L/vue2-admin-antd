@@ -1,5 +1,5 @@
 import routerMap from '@/router/async/router.map'
-import {mergeI18nFromRoutes} from '@/utils/i18n'
+import {formatFullPath} from '@/utils/i18n'
 import Router from 'vue-router'
 import deepMerge from 'deepmerge'
 import basicOptions from '@/router/async/config.async'
@@ -36,7 +36,7 @@ function parseRoutes(routesConfig, routerMap) {
       router = routerMap[item] 
       routeCfg = {path: router.path || item, router: item} //设置 路由配置信息
     } else if (typeof item === 'object') { //当为对象的时候  取对象的router 标记赋值
-      router = routerMap[item.router]
+      router = routerMap[item.address || item.router]
       routeCfg = item
     }
     if (!router) { //当路由不存在的时候 给默认值 并提醒
@@ -45,7 +45,7 @@ function parseRoutes(routesConfig, routerMap) {
     }
     // 从 router 和 routeCfg 解析路由
     const route = {
-      path: routeCfg.path || router.path || routeCfg.router,
+      path: routeCfg.path || router.path || routeCfg.address || routeCfg.router ,
       name: routeCfg.name || router.name,
       component: router.component,
       redirect: routeCfg.redirect || router.redirect,
@@ -53,7 +53,10 @@ function parseRoutes(routesConfig, routerMap) {
         authority: routeCfg.authority || router.authority || routeCfg.meta?.authority || router.meta?.authority || '*',
         icon: routeCfg.icon || router.icon ||  routeCfg.meta?.icon || router.meta?.icon,
         page: routeCfg.page || router.page ||  routeCfg.meta?.page || router.meta?.page,
-        link: routeCfg.link || router.link ||  routeCfg.meta?.link || router.meta?.link
+        link: routeCfg.link || router.link ||  routeCfg.meta?.link || router.meta?.link,
+        pkId: routeCfg.pkId || router.pkId ||  routeCfg.meta?.pkId || router.meta?.pkId,
+        idxParentId:routeCfg.idxParentId || router.idxParentId ||  routeCfg.meta?.idxParentId || router.meta?.idxParentId,
+        remarks: routeCfg.remarks || router.remarks ||  routeCfg.meta?.remarks || router.meta?.remarks,
       }
     }
     if (routeCfg.invisible || router.invisible) {
@@ -64,6 +67,7 @@ function parseRoutes(routesConfig, routerMap) {
     }
     routes.push(route)
   })
+  console.log(JSON.parse(JSON.stringify(routes)))
   return routes
 }
 
@@ -76,16 +80,16 @@ function loadRoutes(routesConfig) {
   /*************** 兼容 version < v0.6.1 *****************/
   if (arguments.length > 0) {
     const arg0 = arguments[0]
-    if (arg0.router || arg0.i18n || arg0.store) {
+    if (arg0.router || arg0.store) {
       routesConfig = arguments[1]
-      console.error('the usage of signature loadRoutes({router, store, i18n}, routesConfig) is out of date, please use the new signature: loadRoutes(routesConfig).')
-      console.error('方法签名 loadRoutes({router, store, i18n}, routesConfig) 的用法已过时, 请使用新的方法签名 loadRoutes(routesConfig)。')
+      console.error('the usage of signature loadRoutes({router, store}, routesConfig) is out of date, please use the new signature: loadRoutes(routesConfig).')
+      console.error('方法签名 loadRoutes({router, store}, routesConfig) 的用法已过时, 请使用新的方法签名 loadRoutes(routesConfig)。')
     }
   }
   /*************** 兼容 version < v0.6.1 *****************/
 
   // 应用配置 存放了所有路由  页面初始化会获取一次数据一次 储存非异步是所有权限页面
-  const {router, store, i18n} = appOptions
+  const {router, store} = appOptions
   // 如果 routesConfig 有值，则更新到本地，否则从本地获取
   if (routesConfig) {
     store.commit('account/setRoutesConfig', routesConfig)
@@ -106,12 +110,14 @@ function loadRoutes(routesConfig) {
       router.addRoutes(finalRoutes)
     }
   }
-  // 提取路由国际化数据
-  mergeI18nFromRoutes(i18n, router.options.routes)
+
+  // 格式化 router.options.routes，生成 fullPath
+  formatFullPath(router.options.routes)
+
   // 初始化Admin后台菜单数据 获取当前首页下的所有菜单
   const rootRoute = router.options.routes.find(item => item.path === '/')
-
   const menuRoutes = rootRoute && rootRoute.children
+  //设置菜单栏
   if (menuRoutes) {
     store.commit('setting/setMenuData', menuRoutes)
   }
@@ -190,6 +196,7 @@ function formatRoutes(routes) {
  * @param pAuthorities 父级路由权限配置集合
  */
 function formatAuthority(routes, pAuthorities = []) {
+  
   routes.forEach(route => {
     const meta = route.meta
     const defaultAuthority = pAuthorities[pAuthorities.length - 1] || {permission: '*'}

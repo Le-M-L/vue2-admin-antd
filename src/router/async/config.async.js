@@ -8,12 +8,14 @@ const routesConfig = [
   {
     router: 'exp404',
     path: '*',
-    name: '404'
+    name: '404',
+    pkId:'12'
   },
   {
     router: 'exp403',
     path: '/403',
-    name: '403'
+    name: '403',
+    pkId:'45'
   }
 ]
 

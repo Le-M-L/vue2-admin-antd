@@ -40,7 +40,7 @@ const options = {
               meta: {
                 page: {
                   closable: false
-                }
+                },
               },
               component: () => import('@/pages/dashboard/workplace'),
             },

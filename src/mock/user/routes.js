@@ -4,34 +4,38 @@ Mock.mock(`${process.env.VUE_APP_API_BASE_URL}/routes`, 'get', () => {
   let result = {}
   result.code = 0
   result.data = [{
-    router: 'root',
+    address: 'root',
+    pkId:'1',
     children: [
       {
-        router: 'dashboard',
+        address: 'dashboard',
+        pkId:'2',
         children: ['workplace', 'analysis'],
       },
       {
-        router: 'form',
+        address: 'form',
+        pkId:'3',
         children: ['basicForm', 'stepForm', 'advanceForm']
       },
       {
-        router: 'basicForm',
+        address: 'basicForm',
         name: '验权表单',
         icon: 'file-excel',
-        authority: 'queryForm'
+        authority: 'queryForm',
+        pkId:'4',
       },
       {
-        router: 'antdv',
-        path: 'antdv',
+        address: 'antdv',
         name: 'Ant Design Vue',
         icon: 'ant-design',
+        pkId:'5',
         link: 'https://www.antdv.com/docs/vue/introduce-cn/'
       },
       {
-        router: 'document',
-        path: 'document',
+        address: 'document',
         name: '使用文档',
         icon: 'file-word',
+        pkId:'6',
         link: 'https://iczer.gitee.io/vue-antd-admin-docs/'
       }
     ]

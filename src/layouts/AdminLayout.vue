@@ -34,7 +34,8 @@
   </a-layout>
 </template>
 
-<script>
+<script>// @ts-nocheck
+
 import AdminHeader from './header/AdminHeader'
 import PageFooter from './footer/PageFooter'
 import Drawer from '../components/tool/Drawer'

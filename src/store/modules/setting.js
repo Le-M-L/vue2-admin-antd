@@ -15,13 +15,14 @@ export default {
     animates: ADMIN.animates,
     palettes: ADMIN.palettes,
     pageMinHeight: 0,
-    menuData: [],
+    menuData: [], //菜单栏
     activatedFirst: undefined,
     customTitles,
     ...config,
     ...localSetting
   },
   getters: {
+    //获取菜单栏 是否进行权限过滤菜单 
     menuData(state, getters, rootState) {
       if (state.filterMenu) {
         const {permissions, roles} = rootState.account
@@ -80,9 +81,11 @@ export default {
     setHideSetting(state, hideSetting) {
       state.hideSetting = hideSetting
     },
+    //设置页面高度
     correctPageMinHeight(state, minHeight) {
       state.pageMinHeight += minHeight
     },
+    //设置菜单栏
     setMenuData(state, menuData) {
       state.menuData = menuData
     },

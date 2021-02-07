@@ -23,23 +23,21 @@
 
 <script>
 import AdminLayout from '@/layouts/AdminLayout'
-import Contextmenu from '@/components/menu/Contextmenu'
+import Contextmenu from '@/components/menu/Contextmenu';//tabs 右击点击效果 关闭tabs菜单
 import PageToggleTransition from '@/components/transition/PageToggleTransition'
 import {mapState, mapMutations} from 'vuex'
-import {getI18nKey} from '@/utils/routerUtil'
 import AKeepAlive from '@/components/cache/AKeepAlive'
 import TabsHead from '@/layouts/tabs/TabsHead'
 
 export default {
   name: 'TabsView',
-  i18n: require('./i18n'),
   components: {TabsHead, PageToggleTransition, Contextmenu, AdminLayout , AKeepAlive },
   data () {
     return {
       clearCaches: [],
       pageList: [],
-      activePage: '',
-      menuVisible: false,
+      activePage: '', //选中的key
+      menuVisible: false, 
       refreshing: false,
       excludeKeys: []
     }
@@ -48,28 +46,34 @@ export default {
     ...mapState('setting', ['multiPage', 'cachePage', 'animate', 'layout', 'pageWidth']),
     menuItemList() {
       return [
-        { key: '1', icon: 'vertical-right', text: this.$t('closeLeft') },
-        { key: '2', icon: 'vertical-left', text: this.$t('closeRight') },
-        { key: '3', icon: 'close', text: this.$t('closeOthers') },
-        { key: '4', icon: 'sync', text: this.$t('refresh') },
+        { key: '1', icon: 'vertical-right', text: '关闭左侧' },
+        { key: '2', icon: 'vertical-left', text: '关闭右侧' },
+        { key: '3', icon: 'close', text: '关闭其他' },
+        { key: '4', icon: 'sync', text: '刷新页面' },
       ]
     },
+    //tabs 最大数
     tabsOffset() {
       return this.multiPage ? 24 : 0
     }
   },
   created () {
+    //设置排除缓存正则
     this.loadCacheConfig(this.$router?.options?.routes)
+     //设置缓存页面 
     this.loadCachedTabs()
     const route = this.$route
     if (this.pageList.findIndex(item => item.fullPath === route.fullPath) === -1) {
       this.pageList.push(this.createPage(route))
     }
+    //设置当前页面地址
     this.activePage = route.fullPath
+    //判断是否 多页标签  然后进行缓存
     if (this.multiPage) {
       this.$nextTick(() => {
         this.setCachedKey(route)
       })
+      //添加监听器
       this.addListener()
     }
   },
@@ -77,7 +81,9 @@ export default {
     this.correctPageMinHeight(-this.tabsOffset)
   },
   beforeDestroy() {
+    //移除监听
     this.removeListener()
+    //初始化高度
     this.correctPageMinHeight(this.tabsOffset)
   },
   watch: {
@@ -208,9 +214,6 @@ export default {
         })
       }, 200)
     },
-    pageName(page) {
-      return this.$t(getI18nKey(page.keyPath))
-    },
     /**
      * 添加监听器
      */
@@ -257,6 +260,7 @@ export default {
         fullPath: route.fullPath, loading: false,
         title: route.meta && route.meta.page && route.meta.page.title,
         unclose: route.meta && route.meta.page && (route.meta.page.closable === false),
+        name: route.name
       }
     },
     /**
@@ -265,8 +269,10 @@ export default {
      */
     setCachedKey(route) {
       const page = this.pageList.find(item => item.fullPath === route.fullPath)
+      //返回 true 或者 false
       page.unclose = route.meta && route.meta.page && (route.meta.page.closable === false)
       if (!page._init_) {
+        //获取页面路由实例
         const vnode = this.$refs.tabContent.$vnode
         page.cachedKey = vnode.key + vnode.componentOptions.Ctor.cid
         page._init_ = true
@@ -290,10 +296,11 @@ export default {
         }
       }
     },
+    //设置排除页面缓存正则
     loadCacheConfig(routes, pCache = true) {
       routes.forEach(item => {
         const cacheAble = item.meta?.page?.cacheAble ?? pCache ?? true
-        if (!cacheAble) {
+        if (!cacheAble) { 
           this.excludeKeys.push(new RegExp(`${item.fullPath}\\d+$`))
         }
         if (item.children) {
