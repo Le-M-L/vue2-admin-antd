@@ -1,4 +1,4 @@
-import enquireJs from 'enquire.js'
+import enquireJs from 'enquire.js'  //媒体查询库
 
 export function isDef(v) {
   return v !== undefined && v !== null

@@ -1,6 +1,5 @@
 // 此配置为系统默认设置，需修改的设置项，在src/config/config.js中添加修改项即可。也可直接在此文件中修改。
 module.exports = {
-  lang: 'CN',                           //语言，可选 CN(简体)、HK(繁体)、US(英语)，也可扩展其它语言
   theme: {                              //主题
     color: '#1890ff',                   //主题色
     mode: 'dark',                       //主题模式 可选 dark、 light 和 night
@@ -19,9 +18,9 @@ module.exports = {
   hideSetting: false,                   //隐藏设置抽屉，true:隐藏，false:不隐藏
   systemName: 'Vue Antd Admin',         //系统名称
   copyright: '2018 ICZER 工作室出品',     //copyright
-  asyncRoutes: true,                   //异步加载路由，true:开启，false:不开启
+  asyncRoutes: false,                   //异步加载路由，true:开启，false:不开启
   showPageTitle: true,                  //是否显示页面标题（PageLayout 布局中的页面标题），true:显示，false:不显示
-  filterMenu: true,                    //根据权限过滤菜单，true:过滤，false:不过滤
+  filterMenu: false,                    //根据权限过滤菜单，true:过滤，false:不过滤
   animate: {                            //动画设置
     disabled: false,                    //禁用动画，true:禁用，false:启用
     name: 'slide',                     //动画效果，支持的动画效果可参考 ./animate.config.js

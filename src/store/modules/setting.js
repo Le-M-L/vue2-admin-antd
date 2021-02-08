@@ -1,6 +1,6 @@
 import config from '@/config'
 import {ADMIN} from '@/config/default'
-import {formatFullPath} from '@/utils/i18n'
+import {formatFullPath} from '@/utils/routerUtil'
 import {filterMenu} from '@/utils/authority-utils'
 import {getLocalSetting} from '@/utils/themeUtil' //样式配置
 
@@ -74,9 +74,6 @@ export default {
     },
     setFixedSideBar(state, fixedSideBar) {
       state.fixedSideBar = fixedSideBar
-    },
-    setLang(state, lang) {
-      state.lang = lang
     },
     setHideSetting(state, hideSetting) {
       state.hideSetting = hideSetting

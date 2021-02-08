@@ -10,15 +10,20 @@
       </div>
       <div class="detail">
         <div class="main">
+          <!-- 标题 -->
           <div class="row">
             <h1 v-if="showPageTitle && title" class="title">{{title}}</h1>
+              <!-- 标题 右边插槽 -->
             <div class="action"><slot name="action"></slot></div>
           </div>
+          <!-- 头像位置 -->
           <div class="row">
             <div v-if="this.$slots.content" class="content">
               <div v-if="avatar" class="avatar"><a-avatar :src="avatar" :size="72" /></div>
+              <!-- 头像右边插槽内容 -->
               <slot name="content"></slot>
             </div>
+            <!-- 头像最右边内容 -->
             <div v-if="this.$slots.extra" class="extra"><slot name="extra"></slot></div>
           </div>
         </div>

@@ -1,6 +1,8 @@
 <template>
   <div class="page-layout">
+    <!-- 页面头部部门 -->
     <page-header ref="pageHeader" :style="`margin-top: ${multiPage ? 0 : -24}px`" :breadcrumb="breadcrumb" :title="pageTitle" :logo="logo" :avatar="avatar">
+     <!-- 页面 title 标题 右边内容 -->
       <slot name="action"  slot="action"></slot>
       <slot slot="content" name="headerContent"></slot>
       <div slot="content" v-if="!this.$slots.headerContent && desc">
@@ -13,6 +15,7 @@
       </div>
       <slot v-if="this.$slots.extra" slot="extra" name="extra"></slot>
     </page-header>
+     <!-- 页面内容 -->
     <div ref="page" :class="['page-content', layout, pageWidth]" >
       <slot></slot>
     </div>
@@ -22,8 +25,6 @@
 <script>
 import PageHeader from '@/components/page/header/PageHeader'
 import {mapState, mapMutations} from 'vuex'
-import {getI18nKey} from '@/utils/routerUtil'
-
 export default {
   name: 'PageLayout',
   components: {PageHeader},
@@ -63,24 +64,16 @@ export default {
     ...mapState('setting', ['layout', 'multiPage', 'pageMinHeight', 'pageWidth', 'customTitles']),
     pageTitle() {
       let pageTitle = this.page && this.page.title
-      return this.customTitle || (pageTitle && this.$t(pageTitle)) || this.title || this.routeName
+      return this.customTitle || pageTitle || this.title || this.routeName
     },
     routeName() {
       const route = this.$route
-      return this.$t(getI18nKey(route.matched[route.matched.length - 1].path))
+      return route.matched[route.matched.length - 1].name
     },
     breadcrumb() {
       let page = this.page
       let breadcrumb = page && page.breadcrumb
-      if (breadcrumb) {
-        let i18nBreadcrumb = []
-        breadcrumb.forEach(item => {
-          i18nBreadcrumb.push(this.$t(item))
-        })
-        return i18nBreadcrumb
-      } else {
-        return this.getRouteBreadcrumb()
-      }
+      return breadcrumb || this.getRouteBreadcrumb()
     },
     marginCorrect() {
       return this.multiPage ? 24 : 0
@@ -92,8 +85,8 @@ export default {
       let routes = this.$route.matched
       let breadcrumb = []
       routes.forEach(route => {
-        const path = route.path.length === 0 ? '/home' : route.path
-        breadcrumb.push(this.$t(getI18nKey(path)))
+        const path = route.path.length === 0 ? '首页' : route.name
+        breadcrumb.push(path)
       })
       let pageTitle = this.page && this.page.title
       if (this.customTitle || pageTitle) {

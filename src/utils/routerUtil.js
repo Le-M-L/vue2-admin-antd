@@ -1,5 +1,4 @@
 import routerMap from '@/router/async/router.map'
-import {formatFullPath} from '@/utils/i18n'
 import Router from 'vue-router'
 import deepMerge from 'deepmerge'
 import basicOptions from '@/router/async/config.async'
@@ -7,7 +6,6 @@ import basicOptions from '@/router/async/config.async'
 //应用配置
 let appOptions = {
   router: undefined,
-  i18n: undefined,
   store: undefined
 }
 
@@ -16,10 +14,23 @@ let appOptions = {
  * @param options
  */
 function setAppOptions(options) {
-  const {router, store, i18n} = options
+  const {router, store} = options
   appOptions.router = router
   appOptions.store = store
-  appOptions.i18n = i18n
+}
+/**
+ * 格式化 router.options.routes，生成 fullPath
+ * @param routes
+ * @param parentPath
+ */
+function formatFullPath(routes, parentPath = '') {
+  routes.forEach(route => {
+    let isFullPath = route.path.substring(0, 1) === '/'
+    route.fullPath = isFullPath ? route.path : (parentPath === '/' ? parentPath + route.path : parentPath + '/' + route.path)
+    if (route.children) {
+      formatFullPath(route.children, route.fullPath)
+    }
+  })
 }
 
 /**
@@ -229,17 +240,6 @@ function formatAuthority(routes, pAuthorities = []) {
 }
 
 /**
- * 从路由 path 解析 i18n key
- * @param path
- * @returns {*}
- */
-function getI18nKey(path) {
-  const keys = path.split('/').filter(item => !item.startsWith(':') && item != '')
-  keys.push('name')
-  return keys.join('.')
-}
-
-/**
  * 加载导航守卫
  * @param guards
  * @param options
@@ -259,4 +259,4 @@ function loadGuards(guards, options) {
   })
 }
 
-export {parseRoutes, loadRoutes, formatAuthority, getI18nKey, loadGuards, deepMergeRoutes, formatRoutes, setAppOptions}
+export {parseRoutes, loadRoutes, formatAuthority, loadGuards, deepMergeRoutes, formatRoutes, setAppOptions, formatFullPath}

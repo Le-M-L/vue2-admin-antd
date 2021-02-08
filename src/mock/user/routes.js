@@ -10,7 +10,7 @@ Mock.mock(`${process.env.VUE_APP_API_BASE_URL}/routes`, 'get', () => {
       {
         address: 'dashboard',
         pkId:'2',
-        children: ['workplace', 'analysis'],
+        children: ['workplace'],
       },
       {
         address: 'form',
