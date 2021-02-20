@@ -27,7 +27,7 @@
         </div>
       </a-layout-content>
       <!-- 登录页的页脚 -->
-      <a-layout-footer style="padding: 0px"> 1
+      <a-layout-footer style="padding: 0px">
         <PageFooter :link-list="footerLinks" :copyright="copyright" />
       </a-layout-footer>
     </a-layout>

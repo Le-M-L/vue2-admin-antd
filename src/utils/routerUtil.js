@@ -45,6 +45,7 @@ function parseRoutes(routesConfig, routerMap) {
     let router = undefined, routeCfg = {}
     if (typeof item === 'string') { //当为字符串的时候 直接赋予路由配置数据
       router = routerMap[item] 
+      console.log(item)
       routeCfg = {path: router.path || item, router: item} //设置 路由配置信息
     } else if (typeof item === 'object') { //当为对象的时候  取对象的router 标记赋值
       router = routerMap[item.address || item.router]
@@ -78,7 +79,6 @@ function parseRoutes(routesConfig, routerMap) {
     }
     routes.push(route)
   })
-  console.log(JSON.parse(JSON.stringify(routes)))
   return routes
 }
 

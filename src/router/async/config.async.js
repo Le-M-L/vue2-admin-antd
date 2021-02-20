@@ -1,7 +1,7 @@
 import routerMap from './router.map'
 import {parseRoutes} from '@/utils/routerUtil'
 
-// 异步路由配置
+// 异步路由配置  //不需要权限的路由
 const routesConfig = [
   'login',
   'root',

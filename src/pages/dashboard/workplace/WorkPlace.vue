@@ -4,20 +4,20 @@
       <div class="title">下午好，{{currUser.name}}，准备吃点什么</div>
       <div>{{currUser.position.name}}</div>
     </div>
-    <template>
-    
-    </template>
+   <div style="background:#fff">
+      <Api />
+   </div>
   </page-layout>
 </template>
 
 <script>
 import PageLayout from '@/layouts/PageLayout' //最外部 用于面包削
-// import Drawer from '@/components/tool/Drawer' //最外部 用于面包削
+import Api from '@/pages/dashboard/workplace/Api'
 import {mapState} from 'vuex'
 
 export default {
   name: 'WorkPlace',
-  components: {  PageLayout},
+  components: { Api, PageLayout},
   data () {
     return {
       projects: [],
