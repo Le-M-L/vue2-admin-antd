@@ -91,6 +91,9 @@ export default {
       form: this.$form.createForm(this)
     }
   },
+  created(){
+    console.log(this.$form)
+  },
   computed: {
     systemName () {
       return this.$store.state.setting.systemName
