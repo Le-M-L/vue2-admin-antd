@@ -126,8 +126,10 @@ export default {
         setAuthorization({token: loginRes.data.token, expireAt: new Date(days)})
         // 获取路由配置
         getModule()
+      
         getRoutesConfig().then(result => {
           const routesConfig = result.data.data
+          console.log(routesConfig)
           loadRoutes(routesConfig)
           this.$router.push('/dashboard/workplace')
           this.$message.success(loginRes.message, 3)
