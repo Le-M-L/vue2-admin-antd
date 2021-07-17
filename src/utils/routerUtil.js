@@ -45,8 +45,7 @@ function parseRoutes(routesConfig, routerMap) {
     let router = undefined, routeCfg = {}
     if (typeof item === 'string') { //当为字符串的时候 直接赋予路由配置数据
       router = routerMap[item] 
-      console.log(item)
-      routeCfg = {path: router.path || item, router: item} //设置 路由配置信息
+      routeCfg = {path: (router && router.path) || item, router: item} //设置 路由配置信息
     } else if (typeof item === 'object') { //当为对象的时候  取对象的router 标记赋值
       router = routerMap[item.address || item.router]
       routeCfg = item
@@ -55,21 +54,41 @@ function parseRoutes(routesConfig, routerMap) {
       console.warn(`can't find register for router ${routeCfg.router}, please register it in advance.`)
       router = typeof item === 'string' ? {path: item, name: item} : item
     }
-    // 从 router 和 routeCfg 解析路由
+     // 从 router 和 routeCfg 解析路由
+     const meta = {
+      authority: router.authority,
+      icon: router.icon,
+      page: router.page,
+      link: router.link,
+      params: router.params,
+      query: router.query,
+      ...router.meta
+    }
+    const cfgMeta = {
+      authority: routeCfg.authority,
+      icon: routeCfg.icon,
+      page: routeCfg.page,
+      link: routeCfg.link,
+      params: routeCfg.params,
+      query: routeCfg.query,
+      ...routeCfg.meta
+    }
+
+    Object.keys(cfgMeta).forEach(key => {
+      if (cfgMeta[key] === undefined || cfgMeta[key] === null || cfgMeta[key] === '') {
+        delete cfgMeta[key]
+      }
+    })
+
+    
+    Object.assign(meta, cfgMeta)
+
     const route = {
       path: routeCfg.path || router.path || routeCfg.address || routeCfg.router ,
       name: routeCfg.name || router.name,
       component: router.component,
       redirect: routeCfg.redirect || router.redirect,
-      meta: {
-        authority: routeCfg.authority || router.authority || routeCfg.meta?.authority || router.meta?.authority || '*',
-        icon: routeCfg.icon || router.icon ||  routeCfg.meta?.icon || router.meta?.icon,
-        page: routeCfg.page || router.page ||  routeCfg.meta?.page || router.meta?.page,
-        link: routeCfg.link || router.link ||  routeCfg.meta?.link || router.meta?.link,
-        pkId: routeCfg.pkId || router.pkId ||  routeCfg.meta?.pkId || router.meta?.pkId,
-        idxParentId:routeCfg.idxParentId || router.idxParentId ||  routeCfg.meta?.idxParentId || router.meta?.idxParentId,
-        remarks: routeCfg.remarks || router.remarks ||  routeCfg.meta?.remarks || router.meta?.remarks,
-      }
+      meta: {...meta, authority: meta.authority || '*'}
     }
     if (routeCfg.invisible || router.invisible) {
       route.meta.invisible = true

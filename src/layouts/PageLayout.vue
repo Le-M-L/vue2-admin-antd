@@ -83,8 +83,9 @@ export default {
     ...mapMutations('setting', ['correctPageMinHeight']),
     getRouteBreadcrumb() {
       let routes = this.$route.matched
+      const path = this.$route.path
       let breadcrumb = []
-      routes.forEach(route => {
+      routes.filter(item => path.includes(item.path)).forEach(route => {
         const path = route.path.length === 0 ? '首页' : route.name
         breadcrumb.push(path)
       })
