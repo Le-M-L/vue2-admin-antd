@@ -35,6 +35,7 @@ const loginIgnore = {
  */
 function initRouter(isAsync) {
   const options = isAsync ? require('./async/config.async').default : require('./config').default
+  console.log(options)
   formatRoutes(options.routes)   //设置权限
   return new Router(options)
 }

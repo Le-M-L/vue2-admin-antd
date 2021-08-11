@@ -12,15 +12,16 @@
   "dependencies": {
     "animate.css": "^4.1.0",
     "ant-design-vue": "1.7.2",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "core-js": "^3.8.3",
     "enquire.js": "^2.1.6",
     "js-cookie": "^2.2.1",
     "mockjs": "^1.1.0",
     "nprogress": "^0.2.0",
+    "qs": "^6.10.1",
     "sha1": "^1.1.1",
     "vue": "^2.6.11",
-    "vue-router": "^3.3.4",
+    "vue-router": "^3.5.2",
     "vuex": "^3.4.0"
   },
   "devDependencies": {

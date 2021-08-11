@@ -19,7 +19,7 @@ const routesConfig = [
   }
 ]
 
-//默认赋予权限 * 
+//默认赋予权限 *  基础路由
 const options = {
   routes: parseRoutes(routesConfig, routerMap)
 }

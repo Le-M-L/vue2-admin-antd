@@ -16,7 +16,6 @@ Vue.use(Antd)
 Vue.config.productionTip = false
 Vue.use(Plugins)
 //加载路由 配置等等信息
-console.log(Vue.prototype.$message)
 bootstrap({router, store,  message: Vue.prototype.$message})
 
 new Vue({
