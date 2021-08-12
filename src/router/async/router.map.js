@@ -26,6 +26,14 @@ const routerMap = {
     name: '工作台',
     component: () => import('@/pages/dashboard/workplace'),
   },
+  demo: {
+    name: 'demo',
+    component: view.blank,
+  },
+  table: {
+    name: 'table',
+    component: () => import('@/pages/demo/table'),
+  },
   details: {
     name: '详情页',
     icon: 'profile',

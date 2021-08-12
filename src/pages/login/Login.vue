@@ -112,7 +112,8 @@
                     getRoutesConfig().then((result) => {
                         const routesConfig = result.data.data;
                         console.log(routesConfig);
-                        loadRoutes(routesConfig);
+                        
+                        loadRoutes([routesConfig.component]);
                         this.$router.push('/dashboard/workplace');
                         this.$message.success(loginRes.message, 3);
                     });

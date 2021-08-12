@@ -43,6 +43,17 @@ const options = {
                 },
               },
               component: () => import('@/pages/dashboard/workplace'),
+            },
+            {
+              path: 'table',
+              name: '测试表格',
+              meta: {
+                page: {
+                  closable: false,
+                  breadcrumb:['首页','测试表格']
+                },
+              },
+              component: () => import('@/pages/demo/table'),
             }
           ]
         },

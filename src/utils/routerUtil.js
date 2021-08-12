@@ -1,4 +1,5 @@
-import routerMap from '@/router/async/router.map'
+// import routerMap from '@/router/async/router.map'
+import { transformObjToRoute } from "@/router/helper/routeHelper"
 import Router from 'vue-router'
 import deepMerge from 'deepmerge'
 import basicOptions from '@/router/async/config.async'
@@ -34,74 +35,6 @@ function formatFullPath(routes, parentPath = '') {
 }
 
 /**
- * 根据 路由配置 和 路由组件注册 解析路由
- * @param routesConfig 路由配置
- * @param routerMap 本地路由组件注册配置
- */
-function parseRoutes(routesConfig, routerMap) {
-  let routes = []
-  routesConfig.forEach(item => {
-    // 获取注册在 routerMap 中的 router，初始化 routeCfg
-    let router = undefined, routeCfg = {}
-    if (typeof item === 'string') { //当为字符串的时候 直接赋予路由配置数据
-      router = routerMap[item] 
-      routeCfg = {path: (router && router.path) || item, router: item} //设置 路由配置信息
-    } else if (typeof item === 'object') { //当为对象的时候  取对象的router 标记赋值
-      router = routerMap[item.address || item.router]
-      routeCfg = item
-    }
-    if (!router) { //当路由不存在的时候 给默认值 并提醒
-      console.warn(`can't find register for router ${routeCfg.router}, please register it in advance.`)
-      router = typeof item === 'string' ? {path: item, name: item} : item
-    }
-     // 从 router 和 routeCfg 解析路由
-     const meta = {
-      authority: router.authority,
-      icon: router.icon,
-      page: router.page,
-      link: router.link,
-      params: router.params,
-      query: router.query,
-      ...router.meta
-    }
-    const cfgMeta = {
-      authority: routeCfg.authority,
-      icon: routeCfg.icon,
-      page: routeCfg.page,
-      link: routeCfg.link,
-      params: routeCfg.params,
-      query: routeCfg.query,
-      ...routeCfg.meta
-    }
-
-    Object.keys(cfgMeta).forEach(key => {
-      if (cfgMeta[key] === undefined || cfgMeta[key] === null || cfgMeta[key] === '') {
-        delete cfgMeta[key]
-      }
-    })
-
-    
-    Object.assign(meta, cfgMeta)
-
-    const route = {
-      path: routeCfg.path || router.path || routeCfg.address || routeCfg.router ,
-      name: routeCfg.name || router.name,
-      component: router.component,
-      redirect: routeCfg.redirect || router.redirect,
-      meta: {...meta, authority: meta.authority || '*'}
-    }
-    if (routeCfg.invisible || router.invisible) {
-      route.meta.invisible = true
-    }
-    if (routeCfg.children && routeCfg.children.length > 0) {
-      route.children = parseRoutes(routeCfg.children, routerMap)
-    }
-    routes.push(route)
-  })
-  return routes
-}
-
-/**
  * 加载路由
  * @param routesConfig {RouteConfig[]} 路由配置
  */
@@ -128,16 +61,17 @@ function loadRoutes(routesConfig) {
   }
   // 如果开启了异步路由，则加载异步路由配置
   const asyncRoutes = store.state.setting.asyncRoutes
- 
   if (asyncRoutes) {
     if (routesConfig && routesConfig.length > 0) {
-      const routes = parseRoutes(routesConfig, routerMap)
+      const routes = transformObjToRoute(routesConfig)
       const finalRoutes = mergeRoutes(basicOptions.routes, routes)
       formatRoutes(finalRoutes)
       // router 应用的路由实例
+      console.log(finalRoutes);
       router.options = {...router.options, routes: finalRoutes}
       router.matcher = new Router({...router.options, routes:[]}).matcher
       router.addRoutes(finalRoutes)
+      console.log(router.getRoutes())
     }
   }
 
@@ -216,7 +150,6 @@ function formatRoutes(routes) {
       route.path = '/' + path
     }
   })
-  
   formatAuthority(routes)
 }
 
@@ -278,4 +211,4 @@ function loadGuards(guards, options) {
   })
 }
 
-export {parseRoutes, loadRoutes, formatAuthority, loadGuards, deepMergeRoutes, formatRoutes, setAppOptions, formatFullPath}
+export { loadRoutes, formatAuthority, loadGuards, deepMergeRoutes, formatRoutes, setAppOptions, formatFullPath}
