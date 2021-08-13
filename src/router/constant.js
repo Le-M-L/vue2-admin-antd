@@ -10,7 +10,7 @@ export const PAGE_NOT_FOUND_NAME = 'PageNotFound';
 /**
  * @description: layou布局
  */
- export const LAYOUT = () => import('@/layouts/tabs/TabsView');
+ export const LAYOUT = () => import('@/layouts/default/tabs');
 
 
 /**

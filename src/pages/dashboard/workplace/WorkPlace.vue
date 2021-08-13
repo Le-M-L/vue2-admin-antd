@@ -1,10 +1,12 @@
 <template>
   <page-layout :avatar="currUser.avatar">
+
     <div slot="headerContent">
       <div class="title">下午好，{{currUser.name}}，准备吃点什么</div>
       <div>{{currUser.position.name}}</div>
     </div>
    <div style="background:#fff">
+
       <Api />
    </div>
   </page-layout>

@@ -1,7 +1,7 @@
 import { findPath, treeMap } from '@/utils/helper/treeHelper';
 import { cloneDeep } from 'lodash-es';
 import { isUrl } from '@/utils/is';
-
+ 
 export function getAllParentPath(treeData, path) {
   const menuList = findPath(treeData, (n) => n.path === path);
   return (menuList || []).map((item) => item.path);

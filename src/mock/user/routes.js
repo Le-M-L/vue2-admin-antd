@@ -59,33 +59,23 @@ Mock.mock(`${process.env.VUE_APP_API_BASE_URL}/routes`, 'get', () => {
                     component: 'BlankView',
                     redirect: '/dashboard/workplace',
                     meta: {
-                        title: 'routes.dashboard.dashboard',
-                        hideChildrenInMenu: true,
-                        icon: 'bx:bx-home',
+                        title: '首页',
                     },
                     children: [
                         {
                             path: 'workplace',
-                            name: 'Workplace',
+                            name: '工作台',
                             component: '/dashboard/workplace/WorkPlace',
                             meta: {
-                                hideMenu: true,
-                                hideBreadcrumb: true,
-                                title: 'routes.dashboard.analysis',
-                                currentActiveMenu: '/dashboard',
-                                icon: 'bx:bx-home',
+                                title: '工作台',
                             },
                         },
                         {
                             path: 'demo',
-                            name: 'demo',
+                            name: '测试',
                             component: '/dashboard/demo/index',
                             meta: {
-                                hideMenu: true,
-                                hideBreadcrumb: true,
-                                title: 'routes.dashboard.analysis',
-                                currentActiveMenu: '/dashboard',
-                                icon: 'bx:bx-home',
+                                title: '测试',
                             },
                         },
                     ],

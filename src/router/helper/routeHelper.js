@@ -13,18 +13,6 @@ LayoutMap.set('BlankView', BlankView);
 
 let dynamicViewsModules;
 
-// function importRoute() {
-//     let pages = require.context('../../pages', true, /\.vue$/);
-//     let map = {};
-//     for (let key of pages.keys()) {
-//         let k = key.replace(/^\./, '');
-//         const lastIndex = k.lastIndexOf('.');
-//         k = k.substring(0, lastIndex);
-//         map[k] = pages(key).default;
-//     }
-//     return map;
-// }
-
 // 动态引入
 function asyncImportRoute(routes) {
     dynamicViewsModules = dynamicViewsModules || require.context('../../pages', true, /\.vue$/);
@@ -62,10 +50,8 @@ function dynamicImport(dynamicViewsModules, component) {
 
     if (matchKeys?.length === 1) {
         return matchKeys[0];
-    }
-    if (matchKeys?.length > 1) {
-        console.warn('请不要创造.vue和.jsx在views文件夹下的相同层次目录下具有相同文件名文件.这将导致动态引入失败  ');
-        return;
+    }else{
+        console.error('未找到匹配的路由')
     }
 }
 
@@ -81,8 +67,6 @@ export function transformObjToRoute(routeList) {
                 route.name = `${route.name}Parent`;
                 route.path = '';
                 const meta = route.meta || {};
-                meta.single = true;
-                meta.affix = false;
                 route.meta = meta;
             }
         }
@@ -146,7 +130,6 @@ function isMultipleRoute(routeModule) {
     }
 
     const children = routeModule.children;
-
     let flag = false;
     for (let index = 0; index < children.length; index++) {
         const child = children[index];
