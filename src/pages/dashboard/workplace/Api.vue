@@ -8,18 +8,13 @@
         使用方式 与 antd table 基本无异。添加了部分API，如下：
       </p>
     </div>
-    <api-table :api-source="apiSource" />
-    <api-table type="event" title="事件" :api-source="events" />
-    <api-table title="Column" :api-source="columnApi" />
-    <api-table title="Search" :api-source="searchApi" />
+
   </div>
 </template>
 
 <script>
-  import ApiTable from '@/components/api/ApiTable'
   export default {
     name: 'Api',
-    components: {ApiTable},
     data() {
       return {
         apiSource: [

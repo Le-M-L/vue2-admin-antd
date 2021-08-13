@@ -26,7 +26,7 @@ import AdminLayout from '@/layouts/default';
 import Contextmenu from '@/components/menu/Contextmenu'; //tabs 右击点击效果 关闭tabs菜单
 import PageToggleTransition from '@/components/transition/PageToggleTransition'; //动画效果
 import { mapState, mapMutations } from 'vuex';
-import AKeepAlive from '@/components/cache/AKeepAlive';
+import AKeepAlive from '@/layouts/cache/AKeepAlive';
 import TabsHead from './components/TabsHead';
 
 export default {
@@ -123,6 +123,7 @@ export default {
     methods: {
         //切换选中 tabs 并且 跳转路由
         changePage (key) {
+             this.activePage = key
             const page = this.pageList.find((item) => item.path === key);
             this.$router.push(page.fullPath);
         },
@@ -255,7 +256,8 @@ export default {
         closePageListener (event) {
             const { closeRoute, nextRoute } = event.detail;
             const closePath = typeof closeRoute === 'string' ? closeRoute : closeRoute.path;
-            this.remove(closePath, nextRoute);
+             const path = closePath && closePath.split('?')[0]
+            this.remove(path, nextRoute)
         },
         /**
          * 页面刷新事件监听

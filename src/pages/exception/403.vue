@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ExceptionPage from '@/components/exception/ExceptionPage'
+import ExceptionPage from './ExceptionPage'
 import {mapState} from 'vuex'
 export default {
   name: 'Exp403',
