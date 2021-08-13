@@ -49,9 +49,9 @@ function loadRoutes(routesConfig) {
     // 如果开启了异步路由，则加载异步路由配置
     const asyncRoutes = store.state.setting.asyncRoutes;
     const routes = transformObjToRoute(routesConfig);
+    // 添加openkeys 展开
     const finalRoutes = mergeRoutes(basicRoutes, routes);
     formatRoutes(finalRoutes);
-
     if (asyncRoutes) {
         if (routesConfig && routesConfig.length > 0) {
             // 将多级路由转换为二级路由
@@ -106,7 +106,7 @@ function formatRoutes(routes) {
  * @param routes 路由
  * @param pAuthorities 父级路由权限配置集合
  */
-function formatAuthority(routes, pAuthorities = []) {
+function formatAuthority(routes, pAuthorities = [],openKeys = [], parentPath = '') {
     routes.forEach((route) => {
         const meta = route.meta;
         const defaultAuthority = pAuthorities[pAuthorities.length - 1] || { permission: '*' };
@@ -132,14 +132,22 @@ function formatAuthority(routes, pAuthorities = []) {
                 }
             }
             meta.authority = authority; //最终把值返回当前路由
+            let isFullPath = route.path.substring(0, 1) === '/';
+            meta.fullPath = isFullPath
+                ? route.path
+                : parentPath === '/'
+                ? parentPath + route.path
+                : parentPath + '/' + route.path;
+
+            meta.openKeys = openKeys.length ? [...openKeys,meta.fullPath]:[meta.fullPath]
         } else {
             const authority = defaultAuthority;
-            route.meta = { authority }; //当前meta元信息不存在的时候 直接赋值默认权限
+            route.meta = { authority,openKeys:[],fullPath:'' }; //当前meta元信息不存在的时候 直接赋值默认权限
         }
         route.meta.pAuthorities = pAuthorities; //父级路由权限配置集合 获取父级路由权限
         if (route.children) {
             //给子集路由赋予当前权限
-            formatAuthority(route.children, [...pAuthorities, route.meta.authority]);
+            formatAuthority(route.children, [...pAuthorities, route.meta.authority],route.meta.openKeys,route.meta.fullPath);
         }
     });
 }

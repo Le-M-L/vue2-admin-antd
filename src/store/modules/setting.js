@@ -43,6 +43,7 @@ export default {
     },
     subMenu(state) {
       const {menuData, activatedFirst} = state
+      console.log(menuData, activatedFirst);
       if (menuData.length > 0 && !menuData[0].fullPath) {
         formatFullPath(menuData)
       }

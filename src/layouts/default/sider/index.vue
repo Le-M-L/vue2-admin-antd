@@ -71,8 +71,7 @@ export default {
         },
         setActivated (route) {
             if (this.layout === 'mix') {
-                let matched = route.matched
-                matched = matched.slice(0, matched.length - 1)
+                let matched = route.meta.openKeys;
                 const { firstMenu } = this
                 for (let menu of firstMenu) {
                     if (matched.findIndex(item => item.path === menu.fullPath) !== -1) {
