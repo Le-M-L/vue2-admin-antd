@@ -74,7 +74,8 @@ export default {
                 let matched = route.meta.openKeys;
                 const { firstMenu } = this
                 for (let menu of firstMenu) {
-                    if (matched.findIndex(item => item.path === menu.fullPath) !== -1) {
+                    if (matched.findIndex(item => item === menu.fullPath) !== -1) {
+                        console.log(menu.fullPath);
                         this.setActivatedFirst(menu.fullPath)
                         break
                     }

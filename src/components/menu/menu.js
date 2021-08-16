@@ -95,6 +95,9 @@ export default {
         }
     },
     watch: {
+        routesMap(val){
+            console.log(val);
+        },
         options(val) {
             if (val.length > 0 && !val[0].fullPath) {
                 this.formatOptions(this.options, '');
@@ -223,8 +226,7 @@ export default {
             let matches = this.$route.matched;
             const route = matches[matches.length - 1];
             let chose = this.routesMap[route.path];
-            console.log(this.routesMap);
-            return chose.openKeys || []
+            return chose?.openKeys || []
             // if (chose.meta && chose.meta.highlight) {
             //     chose = this.routesMap[chose.meta.highlight];
             //     const resolve = this.$router.resolve({ path: chose.fullPath });
@@ -251,7 +253,6 @@ export default {
                     click: (obj) => {
                         // 点击更新选中菜单
                         obj.selectedKeys = [obj.key];
-                        console.log(obj.selectedKeys);
                         this.$emit('select', obj);
                     },
                 },
